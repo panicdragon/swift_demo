@@ -15,11 +15,11 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        //let appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         
-        let context: NSManagedObjectContext = appDel.managedObjectContext
+        //let context: NSManagedObjectContext = appDel.managedObjectContext
         
-//        var newUser = NSEntityDescription.insertNewObjectForEntityForName("Users", inManagedObjectContext: context)
+        //var newUser = NSEntityDescription.insertNewObjectForEntityForName("Users", inManagedObjectContext: context)
 //        
 //        newUser.setValue("Rob", forKey: "username")
 //        
@@ -35,30 +35,62 @@ class ViewController: UIViewController {
 //            
 //        }
         
+        
+        var appDel: AppDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        
+        var context: NSManagedObjectContext = appDel.managedObjectContext
+        
+        var newUser = NSEntityDescription.insertNewObjectForEntityForName("Users", inManagedObjectContext: context) as! NSManagedObject
+
+        
+        
         var request = NSFetchRequest(entityName: "Users")
         
         request.returnsObjectsAsFaults = false
         
-        do {
+        request.predicate = NSPredicate(format: "username = %@", "Kirsten")
+        
+        
+        var results = context.executeFetchRequest(request, error: nil)
             
-            let results = try context.executeFetchRequest(request)
-            
-            if results.count > 0 {
+        if results!.count > 0 {
                 
-                for result in results as! [NSManagedObject] {
-                 
-                    print(result.valueForKey("username")!)
-                    print(result.valueForKey("password")!)
+            for result: AnyObject in results! {
                     
+                if let username: String = result.valueForKey("username") as? String {
+                    
+                        printlen(username)
                 }
                 
             }
             
-        } catch {
+        } else {
             
             print("fetch しっぱい")
-            
         }
+        
+        
+        
+//        do {
+//            
+//            let results = try context.executeFetchRequest(request)
+//            
+//            if results.count > 0 {
+//                
+//                for result in results as! [NSManagedObject] {
+//                 
+//                    print(result.valueForKey("username")!)
+//                    print(result.valueForKey("password")!)
+//                    
+//                }
+//                
+//            }
+//            
+//        } catch {
+//            
+//            print("fetch しっぱい")
+//            
+//        }
         
         
         
